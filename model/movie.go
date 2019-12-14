@@ -2,6 +2,7 @@ package model
 
 import (
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"path"
@@ -27,42 +28,43 @@ type Movie struct {
 	Model
 }
 
-// ExtractImageName :
+// ExtractImageName : Extract image name from original source
 func extractImageName(fn string) string {
 	return strings.TrimSuffix(strings.TrimPrefix(fn, "/"), extractImageFormat(fn))
 }
 
-// ExtractImageFormat :
+// ExtractImageFormat : Extract image name from original source
 func extractImageFormat(fn string) string {
 	return path.Ext(fn)
 }
 
-// FilledUpImageInfo :
+// FilledUpImageInfo : Fill up image url and path
 func (m *Movie) FilledUpImageInfo(baseurl string, postersize string, imagepath string) {
 
 	m.ImageOriginalURL = baseurl + postersize + imagepath
 	m.ImageName = extractImageName(imagepath)
 	m.Format = extractImageFormat(imagepath)
 
+	//open a file for writing
+	pwd, _ := os.Getwd()
+	imagename := strconv.Itoa(m.ID) + "_" + m.Title + m.Format
+	imageFullPath := filepath.Join(pwd, os.Getenv("DEFAULT_IMAGE_FOLDER"), imagename)
+	m.ImageLocalPath = imageFullPath
+
 }
 
 // DownloadImage : Download image from web
 func (m *Movie) DownloadImage() error {
-	url := m.ImageOriginalURL
-	response, err := http.Get(url)
-	if err != nil {
-		panic(err)
-	}
-	defer response.Body.Close()
-
-	//open a file for writing
-	pwd, err := os.Getwd()
-	imagename := strconv.Itoa(m.ID) + "_" + m.Title + m.Format
-	imageFullPath := filepath.Join(pwd, os.Getenv("DEFAULT_IMAGE_FOLDER"), imagename)
-	//
-	if _, err := os.Stat(imageFullPath); os.IsNotExist(err) {
+	if _, err := os.Stat(m.ImageLocalPath); os.IsNotExist(err) {
+		url := m.ImageOriginalURL
+		response, err := http.Get(url)
+		if err != nil {
+			panic(err)
+		}
+		defer response.Body.Close()
 		// path/to/whatever does not exist
-		file, err := os.Create(imageFullPath)
+		log.Println(m.ImageLocalPath)
+		file, err := os.Create(m.ImageLocalPath)
 		if err != nil {
 			panic(err)
 		}
@@ -74,12 +76,6 @@ func (m *Movie) DownloadImage() error {
 			panic(err)
 		}
 	}
-
-	if err != nil {
-		panic(err)
-	}
-
-	m.ImageLocalPath = imageFullPath
 
 	return nil
 }
