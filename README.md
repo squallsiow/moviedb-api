@@ -1,4 +1,4 @@
-#### moviedb-api
+# moviedb-api
 
 ### Installation
 
@@ -20,9 +20,9 @@ Tools used for this development :
 2. [VS Code](https://code.visualstudio.com/download)
 3. [POSTMAN](https://www.getpostman.com/)
 
-### Available API
+# Available API
 ## Retrieve and store Movie information into local server
-# Header required for ADMIN :
+### Header required for ADMIN :
 X-Authenticati : CflFPa89BzSiVdamikDavDBpKtC9A2zk
 
 API [PUT]       : http://localhost:8080/admin/movie 
@@ -33,7 +33,7 @@ API [PUT]       : http://localhost:8080/admin/movie
 ```
 
 ## Get movie information from local
-# movieID as parameter
+### movieID as parameter
 API [GET]       : http://localhost:8080/movie/:movieID
 
 ## Show all available movies in datastore
