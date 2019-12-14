@@ -53,11 +53,12 @@ func main() {
 	mid := mw.New()
 	// Routes
 	admin := api.Group("/admin", mid.Authentication)
-	admin.GET("/movie", ctrl.GetMovieByIDAdmin)
+	admin.PUT("/movie", ctrl.GetTMBMovieByID)
 
 	// User route
-	api.GET("/", ctrl.Hello)
+	// api.GET("/", ctrl.Hello)
 	api.GET("/showall", ctrl.ShowAllMovies)
+	api.GET("/movie/:movieID", ctrl.GetMovieByID)
 
 	api.Logger.Fatal(api.Start(":8080"))
 

@@ -4,12 +4,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/moviedb-api/model"
 	"github.com/labstack/echo"
+	"github.com/moviedb-api/model"
 )
 
-// GetMovieByID : Get movie with ID from DB
-func (ctrl Controller) GetMovieByID(c echo.Context) error {
+// GetMovieByID : Get movie with ID
+func (ctrl Controller) GetTMBMovieByID(c echo.Context) error {
 	var i struct {
 		ID int
 	}
@@ -40,22 +40,21 @@ func (ctrl Controller) GetMovieByID(c echo.Context) error {
 	movie.FilledUpImageInfo(ctrl.imageConfig.BaseURL,
 		ps,
 		tmMovie.PosterPath)
-
-	// Save to memory
-	go ctrl.SaveMovieToLocal(movie)
-
+	
 	// Save to folder
 	go movie.DownloadImage()
 
-	return c.JSON(http.StatusOK, movie)
+	go ctrl.SaveMovieToLocal(movie)
+
+	return c.JSON(http.StatusOK, "Process complete!")
 }
 
 func (ctrl *Controller) SaveMovieToLocal(m model.Movie) {
-	err := ctrl.datacon.SetMovie(m)
+	m.IsLocal = true
+	err := ctrl.datacon.InsertMovie(m)
 
 	if err != nil {
 		panic(err)
 	}
-	m.IsLocal = true
 
 }

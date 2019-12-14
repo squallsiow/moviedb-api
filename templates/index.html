@@ -1,12 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
 
-	<!DOCTYPE html>
-	<html lang="en">
-	<head>
-	<meta charset="UTF-8">
-	<title>Hello world!</title>
-	</head>
-	<body>
-	<h1>Hello World</h1>
-	</body>
-	</html>
-	
+<head>
+    <meta charset="UTF-8">
+    <title>The Movie Database</title>
+</head>
+
+<body>
+    <h1>Title : {{.Title}}</h1>
+    <img src="{{.ImageLocalPath}}" alt="Cannot load image" style="width: 92px;height: 138px">
+    <h3>Overview : {{.Description}}</h1>
+    <h3>Homepage : {{.DirectLink}}</h1>
+</body>
+
+</html>
