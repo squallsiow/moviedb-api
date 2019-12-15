@@ -43,7 +43,6 @@ func New() (*Database, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not set up buckets, %v", err)
 	}
-	fmt.Println("DB Setup Done")
 
 	database := Database{DB: db}
 
@@ -89,10 +88,9 @@ func (db *Database) GetAllMovies() ([]*model.Movie, error) {
 // GetMovieByID :
 func (db *Database) GetMovieByID(id int) (*model.Movie, error) {
 	movie := model.Movie{}
-	db.DB.View(func(tx *bolt.Tx) error {
+	err := db.DB.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("DB")).Bucket([]byte(model.DB_MOVIE))
 		v := b.Get([]byte(strconv.Itoa(id)))
-
 		if v == nil {
 			return errors.New("No movie ID " + strconv.Itoa(id) + " exist!")
 		}
@@ -103,6 +101,10 @@ func (db *Database) GetMovieByID(id int) (*model.Movie, error) {
 		}
 		return nil
 	})
+
+	if err != nil {
+		return nil, err
+	}
 
 	return &movie, nil
 }
