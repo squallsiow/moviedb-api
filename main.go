@@ -36,6 +36,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	defer ctrl.CloseDB()
+
 	// set templates
 	t := &Template{
 		templates: template.Must(template.ParseGlob("templates/*.html")),

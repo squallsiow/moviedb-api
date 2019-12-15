@@ -43,7 +43,6 @@ func New() (*Database, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not set up buckets, %v", err)
 	}
-
 	database := Database{DB: db}
 
 	return &database, nil
