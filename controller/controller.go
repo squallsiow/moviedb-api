@@ -33,6 +33,10 @@ func New(m *tmdb.TMDb) (*Controller, error) {
 	return ctrl, nil
 }
 
+func (ctrl *Controller) CloseDB() error {
+	return ctrl.datacon.DB.Close()
+}
+
 // GenerateImageConfig :
 func (ctrl *Controller) GenerateImageConfig() error {
 	imgcf, err := ctrl.mdbc.GetConfiguration()
