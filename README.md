@@ -19,7 +19,7 @@ Tools used for this development :
 3. [POSTMAN](https://www.getpostman.com/)
 
 ## 📚 Available API
-#### Retrieve and store Movie information into local server
+### Retrieve and store Movie information into local server
 Header required for ADMIN :
 X-Authentication : CflFPa89BzSiVdamikDavDBpKtC9A2zk
 
