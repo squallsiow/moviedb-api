@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/boltdb/bolt"
@@ -20,7 +21,11 @@ type Database struct {
 func New() (*Database, error) {
 	// pwd, err := os.Getwd()
 	// dbpath := filepath.Join(pwd, os.Getenv("DEFAULT_DATASTORE_FILEPATH"))
-	dbpath := os.Getenv("DEFAULT_DATASTORE_FILEPATH")
+	dbpath, err := filepath.Abs(os.Getenv("DEFAULT_DATASTORE_FILEPATH"))
+
+	if err != nil {
+		return nil, fmt.Errorf("path not found, %v", err)
+	}
 
 	db, err := bolt.Open(dbpath, 0600, nil)
 	if err != nil {

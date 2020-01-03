@@ -49,7 +49,11 @@ func (m *Movie) FilledUpImageInfo(baseurl string, postersize string, imagepath s
 	// pwd, _ := os.Getwd()
 	imagename := strconv.Itoa(m.ID) + "_" + m.Title + m.Format
 	// imageFullPath := filepath.Join(pwd, os.Getenv("DEFAULT_IMAGE_FOLDER"), imagename)
-	imageFullPath := filepath.Join(os.Getenv("DEFAULT_IMAGE_FOLDER"), imagename)
+	imageFullPath, err := filepath.Abs(filepath.Join(os.Getenv("DEFAULT_IMAGE_FOLDER"), imagename))
+
+	if err != nil {
+		panic(err)
+	}
 	m.ImageLocalPath = imageFullPath
 
 }
