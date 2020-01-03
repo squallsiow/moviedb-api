@@ -24,7 +24,11 @@ func New() (*Database, error) {
 	dbpath, err := filepath.Abs(os.Getenv("DEFAULT_DATASTORE_FILEPATH"))
 
 	if err != nil {
-		return nil, fmt.Errorf("path not found, %v", err)
+		return nil, fmt.Errorf("path not valid, %v", err)
+	}
+	// Create db file
+	if _, err := os.Stat(dbpath); os.IsNotExist(err) {
+		os.MkdirAll(dbpath, os.ModeDir)
 	}
 
 	db, err := bolt.Open(dbpath, 0600, nil)
