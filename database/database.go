@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strconv"
 
 	"github.com/boltdb/bolt"
@@ -19,9 +18,9 @@ type Database struct {
 
 // New : Initialize Database connection
 func New() (*Database, error) {
-	pwd, err := os.Getwd()
+	// pwd, err := os.Getwd()
 	// dbpath := filepath.Join(pwd, os.Getenv("DEFAULT_DATASTORE_FILEPATH"))
-	dbpath := filepath.Join(pwd, "../", os.Getenv("DEFAULT_DATASTORE_FILEPATH"))
+	dbpath := os.Getenv("DEFAULT_DATASTORE_FILEPATH")
 
 	db, err := bolt.Open(dbpath, 0600, nil)
 	if err != nil {
