@@ -3,4 +3,4 @@ env_variables:
       ADMIN_SECRET: "CflFPa89BzSiVdamikDavDBpKtC9A2zk"
       API_KEY: "b95d785d64a4e396406586a175e7955c"
       DEFAULT_IMAGE_FOLDER: "../Data/gallery"
-      DEFAULT_DATASTORE_FILEPATH: "../Data/DB/moviedb.db".
+      DEFAULT_DATASTORE_FILEPATH: "../Data/DB/moviedb.db"
