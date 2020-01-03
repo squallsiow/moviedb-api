@@ -28,7 +28,11 @@ func New() (*Database, error) {
 	}
 	// Create db file
 	if _, err := os.Stat(dbpath); os.IsNotExist(err) {
-		os.MkdirAll(dbpath, os.ModeDir)
+		err := os.MkdirAll(dbpath, os.ModeDir)
+
+		if err != nil {
+			return nil, fmt.Errorf("unable to create folder, %v", err)
+		}
 	}
 
 	db, err := bolt.Open(dbpath, 0600, nil)
