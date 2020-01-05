@@ -122,8 +122,8 @@ func createLocalDB() error {
 
 	log.Println("Checking if need create db path", dbpath)
 	// Create db folder
-	_, err := os.Stat(dbpath); 
-	
+	_, err = os.Stat(dbpath)
+
 	if os.IsNotExist(err) {
 		err := os.MkdirAll(dbpath, os.ModePerm)
 		log.Println("Create dir db path", dbpath)
@@ -131,9 +131,8 @@ func createLocalDB() error {
 			return fmt.Errorf("unable to create folder, %v", err)
 		}
 
-	}
-	else {
-		log.Println( err )
+	} else {
+		log.Println(err)
 	}
 
 	gallerypath, err := filepath.Abs(os.Getenv("DEFAULT_IMAGE_FOLDER"))
