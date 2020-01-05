@@ -119,6 +119,8 @@ func createLocalDB() error {
 	if err != nil {
 		return fmt.Errorf("path not valid, %v", err)
 	}
+
+	log.Println("Checking if need create db path", dbpath)
 	// Create db folder
 	if _, err := os.Stat(dbpath); os.IsNotExist(err) {
 		err := os.MkdirAll(dbpath, os.ModePerm)
