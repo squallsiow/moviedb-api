@@ -20,23 +20,12 @@ type Database struct {
 
 // New : Initialize Database connection
 func New() (*Database, error) {
-	// pwd, err := os.Getwd()
-	// dbpath := filepath.Join(pwd, os.Getenv("DEFAULT_DATASTORE_FILEPATH"))
 
-	dbpath, err := filepath.Abs(os.Getenv("DEFAULT_DATASTORE_FILEPATH"))
+	err := createLocalDB()
 
+	dbpath, err := filepath.Abs(filepath.Join(os.Getenv("DEFAULT_DATASTORE_FILEPATH"), os.Getenv("DEFAULT_DATASTORE_FILE")))
 	if err != nil {
 		return nil, fmt.Errorf("path not valid, %v", err)
-	}
-
-	log.Println("Start connect db path", dbpath)
-	// Create db file
-	if _, err := os.Stat(dbpath); os.IsNotExist(err) {
-		err := os.MkdirAll(dbpath, os.ModeDir)
-		log.Println("making dir")
-		if err != nil {
-			return nil, fmt.Errorf("unable to create folder, %v", err)
-		}
 	}
 
 	db, err := bolt.Open(dbpath, 0600, nil)
@@ -123,4 +112,38 @@ func (db *Database) GetMovieByID(id int) (*model.Movie, error) {
 	}
 
 	return &movie, nil
+}
+
+func createLocalDB() error {
+	dbpath, err := filepath.Abs(os.Getenv("DEFAULT_DATASTORE_FILEPATH"))
+	if err != nil {
+		return fmt.Errorf("path not valid, %v", err)
+	}
+	// Create db folder
+	if _, err := os.Stat(dbpath); os.IsNotExist(err) {
+		err := os.MkdirAll(dbpath, os.ModePerm)
+		log.Println("Create dir db path", dbpath)
+		if err != nil {
+			return fmt.Errorf("unable to create folder, %v", err)
+		}
+
+	}
+
+	gallerypath, err := filepath.Abs(os.Getenv("DEFAULT_IMAGE_FOLDER"))
+	if err != nil {
+		return fmt.Errorf("path not valid, %v", err)
+	}
+
+	//	Create gallery folder
+	if _, err := os.Stat(gallerypath); os.IsNotExist(err) {
+		err := os.MkdirAll(gallerypath, os.ModePerm)
+		log.Println("Create dir gallery path", gallerypath)
+		if err != nil {
+			return fmt.Errorf("unable to create folder, %v", err)
+		}
+
+	}
+
+	return nil
+
 }
