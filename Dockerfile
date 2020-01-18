@@ -1,4 +1,4 @@
-FROM golang:latest as builder
+FROM golang:latest 
 ADD . /go/src/github.com/moviedb-api
 WORKDIR  /go/src/github.com/moviedb-api
 
@@ -10,7 +10,8 @@ ENV DEFAULT_IMAGE_FOLDER 'Data/Gallery'
 ENV DEFAULT_DATASTORE_FILEPATH 'Data/DB'
 ENV DEFAULT_DATASTORE_FILE 'moviedb.db'
 
-RUN make
+RUN make setenv
+RUN make build
 
 ENTRYPOINT ./moviedb-api
 

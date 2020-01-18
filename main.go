@@ -1,8 +1,13 @@
 package main
 
 import (
+	"context"
 	"html/template"
 	"io"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -63,6 +68,25 @@ func main() {
 	api.GET("/showall", ctrl.ShowAllMovies)
 	api.GET("/movie/:movieID", ctrl.GetMovieByID)
 
-	api.Logger.Fatal(api.Start(":8080"))
+	// api.Logger.Fatal(api.Start(":8080"))
+
+	// Start server
+	go func() {
+		if err := api.Start(":8080"); err != nil {
+			api.Logger.Info("shutting down the server")
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown the server with
+	// a timeout of 10 seconds.
+	quit := make(chan os.Signal)
+	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := api.Shutdown(ctx); err != nil {
+		api.Logger.Fatal(err)
+	}
 
 }
